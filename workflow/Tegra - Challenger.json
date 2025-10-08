@@ -1,0 +1,1629 @@
+{
+  "name": "Tegra - Challenger",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# TEGRA CHALLENGER - WebScraping workflow with n8n\n",
+        "height": 80,
+        "width": 960,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "2e5b0a38-17ed-496c-bc3b-fb5f8df46619",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Input via Google Planilhas\n",
+        "height": 224,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1696,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "e48613b3-f23b-4218-9381-4a0411c38d26",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Puppeteer\n\nResponsavel por extrair o conteudo da pagina e passar por CAPTCHA\n",
+        "height": 320,
+        "width": 198,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "da35d328-865a-45ab-a2d0-4b45e817e65d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## API CloudScraper (Decrepit)\n\nEm caso de Falha utiliza o CloudScraper\n\nhttps://github.com/jordanpotti/CloudScraper\n\nCloudscraper is a Python library that supports web scraping projects by providing easy-to-use ways to bypass Cloudflare protection.",
+        "height": 448,
+        "width": 544,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -544,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "6ff86807-0868-4138-a8ce-be8a67fa6f91",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Test Websites\nUse these sites that allow ethical scraping:\n\nhttps://books.toscrape.com - Book catalog with pagination\n\nhttps://quotes.toscrape.com - Simple quotes site\n\nhttps://scrapeme.live/shop - E-commerce with products",
+        "height": 208,
+        "width": 512,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        592,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "b9459e84-d28e-4671-9762-0438fed9e913",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1856,
+        64
+      ],
+      "id": "2dac9e32-3461-4832-99df-a46a4ff6b362",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -464,
+        64
+      ],
+      "id": "61d095cc-a68d-4cb7-9c39-62baa800a4ea",
+      "name": "Loop Over Items",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1248,
+        64
+      ],
+      "id": "f82ce103-3add-47c1-8cae-421a82d33313",
+      "name": "Loop Over Items1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "## Pega os Sublinks da pagina",
+        "height": 288,
+        "width": 224,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        224,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "fa666b23-4ff9-4818-8e76-dc84f21193e3",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Extrai o conteudo de cada link interno da pagina main\n\n\nLoop Secundario",
+        "height": 752,
+        "width": 288,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1152,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "3e0e9fa1-b92e-4df6-99bb-d3f63ada3c75",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        576
+      ],
+      "id": "31860c03-76c9-41c4-8924-4243fd39b677",
+      "name": "Code in Python (Beta)",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "scraped_content",
+          "mode": "list",
+          "cachedResultName": "scraped_content"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        2960,
+        48
+      ],
+      "id": "78c1abfd-bed7-4265-8253-ddb08c551cbb",
+      "name": "Upload to DataBase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "UrtKRxU41LfNOfdC",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2912,
+        416
+      ],
+      "id": "477681ee-ae7b-4edd-9191-b3bc58f4cc8b",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "W3uUiMfSVGTQCJwz",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "dataPropertyName": "body",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "links",
+              "cssSelector": "a",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        64
+      ],
+      "id": "015c7c5d-6538-42a2-9a42-23bd5095584c",
+      "name": "HTML",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "758cbf24-fc93-4994-8f18-ac064224bbcc",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "c71336f9-7a0c-49c2-a7ea-d96abb8c17a6",
+              "name": "instructions",
+              "value": "={{ $json.instructions }}",
+              "type": "string"
+            },
+            {
+              "id": "cbb4318b-174f-4ef7-abee-b70e184662e2",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "6a52f817-52e2-4764-a3e7-abcaab66cffa",
+              "name": "last_updated",
+              "value": "={{ $json.last_updated }}",
+              "type": "string"
+            },
+            {
+              "id": "049b7784-7dfb-45c1-91a4-d64a370028f0",
+              "name": "error_notes",
+              "value": "={{ $json.error_notes }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        64
+      ],
+      "id": "747c8788-0cab-4a90-b760-b07b05bbd54e",
+      "name": "Normalização Planilhas",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "684c38bf-2b5a-433f-bd36-7f94ede5e22f",
+              "name": "links",
+              "value": "={{ $json.links.slice(2, 12) }}",
+              "type": "array"
+            },
+            {
+              "id": "b24b941e-1b79-4c39-b412-2ee06811e5f3",
+              "name": "url",
+              "value": "={{ $('Puppeteer - Main Content').item.json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        64
+      ],
+      "id": "791fa548-1960-48eb-9067-48afb4859ad4",
+      "name": "Filtro de links - 10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Acessa o ÚNICO item de entrada (que contém o array de links)\nconst inputItem = $input.first();\n\n// 2. Extrai o array de links (limitando a 10, como no seu fluxo anterior)\nconst linksArray = (inputItem.json.links || []).slice(0, 10);\n\n// 3. Mapeia o array de links para criar MÚLTIPLOS itens de saída.\nreturn linksArray.map(link => ({\n    json: { \n        url: link // Cada item de saída terá a URL individual\n    },\n    // Mantém a ligação com o item original (crucial para o n8n)\n    pairedItem: {\n        item: inputItem.pairedItem?.item, \n        input: inputItem.pairedItem?.input \n    }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        64
+      ],
+      "id": "f8f40745-e126-4606-9ffc-ca2e5a35ce3d",
+      "name": "Code in JavaScript",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eed6d490-a0c7-4e43-9c55-cd9cfa14881b",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        576
+      ],
+      "id": "f5967ffb-420c-4ce8-a429-65f96c17228a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A",
+          "mode": "list",
+          "cachedResultName": "Tegra - WebScrapping Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Start Information",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "url"
+          ],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "instructions",
+              "displayName": "instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_notes",
+              "displayName": "error_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        592
+      ],
+      "id": "14c920ab-f6dd-4dcd-9053-ba08b5e7f3d0",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uvC2UtLPfx0t9afo",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Combina todos os conteudos das paginas ",
+        "height": 240,
+        "width": 496,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "2655f8d1-7800-49e6-814c-f8d5f58f5318",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Filtro de Links",
+        "height": 288,
+        "width": 192,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "9175ea74-9ec2-4033-94f3-fc4ad8a3c3ce",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Normaliza as Informações\n",
+        "height": 224,
+        "width": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -960,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "9aa2d279-d8dc-439e-866d-4c738d640792",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## LOOP PRINCIPAL\n",
+        "height": 224,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -544,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "0e508c45-a1a8-4865-8073-25fac9bd37f8",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## VERIFICA FALLBACK\n\nSe o FallBack funcionar o fluxo continua, se não atualiza a planinha com o status \"faild\".\n",
+        "height": 304,
+        "width": 688,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        464
+      ],
+      "typeVersion": 1,
+      "id": "86a0a0dd-ec1d-4e43-a083-69a1a276d44a",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Multiplas Saidas\n\nMapeia o array de links para criar MÚLTIPLOS itens de saída.",
+        "height": 288,
+        "width": 224,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        832,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "14f7e85d-131c-452f-9698-bb505d818e28",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87f1bf15-66e4-4072-9d56-aa44bb1da8e8",
+              "name": "conteudo-10-links",
+              "value": "={{ $json.body }}",
+              "type": "string"
+            },
+            {
+              "id": "0fd699ed-d322-4ade-8373-0f572328bffe",
+              "name": "conteudo-main",
+              "value": "={{ $('Puppeteer - Main Content').item.json.body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1744,
+        48
+      ],
+      "id": "d7d37a5f-eb0a-47d4-8c6a-31fdd72e90d3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "browserWSEndpoint": "wss://production-sfo.browserless.io?token=2TBsYfrIB7y5qtHbe149496f55a8e2d99b0486dd5243744c0",
+          "waitUntil": "domcontentloaded",
+          "addContainerArgs": true
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        80
+      ],
+      "id": "78355195-5e65-4d25-9bc8-cbea44374c34",
+      "name": "Puppeteer - Main Content",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acee389e-28f4-40ac-9067-4d0df09abd23",
+              "name": "combined_text ",
+              "value": "={{ $json['conteudo-10-links'] }}{{ $json['conteudo-main'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        48
+      ],
+      "id": "6bdee46e-f0b4-4832-bfaf-1d91b5096fa2",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        1584
+      ],
+      "id": "653b8d93-20c8-446b-acc4-b27e83052468",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "W3uUiMfSVGTQCJwz",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "use this tool to search the database",
+        "tableName": {
+          "__rl": true,
+          "value": "scraped_content",
+          "mode": "list",
+          "cachedResultName": "scraped_content"
+        },
+        "topK": 10,
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source_url",
+                "value": "={{ $json.output }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        944,
+        1408
+      ],
+      "id": "4f93330a-7c19-456f-962f-21636b4eb657",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "UrtKRxU41LfNOfdC",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        864,
+        1552
+      ],
+      "id": "d2900a46-05b0-404f-8064-4ff60a05024f",
+      "name": "Embeddings OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "W3uUiMfSVGTQCJwz",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## RAG AGENT\n",
+        "height": 420,
+        "width": 700,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        112,
+        1280
+      ],
+      "typeVersion": 1,
+      "id": "2f9520ab-0fe6-4c15-a903-4e3a9ab79256",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## VECTOR STRORE w/RERANK\n",
+        "height": 420,
+        "width": 540,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        1280
+      ],
+      "typeVersion": 1,
+      "id": "00e5317a-cd23-4564-9bf1-05e0418734b5",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## METADATA AGENT\n",
+        "height": 416,
+        "width": 576,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -464,
+        1280
+      ],
+      "typeVersion": 1,
+      "id": "91a0bfcb-08c5-48c5-9ff2-71ac6883b75f",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "##                                                    Project Overview\n\n#### Build a web scraping automation workflow using n8n that extracts content from websites, handles common anti-bot measures, and stores the processed data in a Supabase vector database for semantic search.",
+        "height": 208,
+        "width": 512,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "0424dda5-2d94-44a7-800d-b5add537ce43",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        1584
+      ],
+      "id": "55999d6c-0e1a-4493-967c-6fa8d1cb9588",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        1408
+      ],
+      "id": "e47a2ecd-f6f8-4283-8d67-d454925ca45e",
+      "name": "When chat message received",
+      "webhookId": "c755fcaf-b684-40a2-8004-cb9b7d3d849e"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Filtro de links - 10').item.json.url }}{{ $json.url }}",
+        "options": {
+          "browserWSEndpoint": "wss://production-sfo.browserless.io?token=2TBsYfrIB7y5qtHbe149496f55a8e2d99b0486dd5243744c0",
+          "waitUntil": "domcontentloaded",
+          "addContainerArgs": true
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        320
+      ],
+      "id": "9cdc07cd-c0b9-4fdc-9e63-ab2e0b4ce9bc",
+      "name": "Puppeteer - Links Content",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1872,
+        432
+      ],
+      "id": "2e920321-7f36-409a-ada8-2a46430c992d",
+      "name": "API CloudScraping1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- FUNÇÃO DE CHUNKING ---\n// A função adaptada para usar o tamanho do caractere como proxy para o token.\n// Requisito: ~800-1000 tokens (usaremos 3500 caracteres como estimativa), overlap de 100.\nfunction criarChunksInteligentes(texto, tamanhoMaxCarac = 3500, overlapCarac = 300) {\n    const chunks = [];\n    let inicio = 0;\n\n    // Se o texto for muito grande (mais de 100 mil caracteres), ele pode falhar\n    if (texto.length > 200000) {\n        console.warn('O texto combinado é excessivamente grande. Pode causar falha no processamento.');\n    }\n\n    while (inicio < texto.length) {\n        let fim = inicio + tamanhoMaxCarac;\n\n        // Se não é o último chunk, tenta quebrar em uma frase completa ou parágrafo.\n        if (fim < texto.length) {\n            // Tenta encontrar o último ponto final ou quebra de linha antes do limite.\n            const ultimoPonto = texto.lastIndexOf('.', fim);\n            const ultimaQuebra = texto.lastIndexOf('\\n', fim);\n\n            // Usa a quebra mais próxima do limite 'fim', garantindo que não volte demais.\n            // O limite 'inicio + 1000' (exemplo) garante que o chunk não fique minúsculo.\n            const limiteMinimo = inicio + tamanhoMaxCarac * 0.75;\n            let melhorQuebra = Math.max(ultimoPonto, ultimaQuebra);\n            \n            if (melhorQuebra > limiteMinimo) {\n                // Adiciona 1 para incluir o ponto/quebra de linha no chunk\n                fim = melhorQuebra + 1;\n            } else {\n                // Se não encontrou uma quebra boa, força a quebra no limite de caracteres.\n                fim = inicio + tamanhoMaxCarac;\n            }\n        }\n\n        const chunk = texto.slice(inicio, fim).trim();\n        if (chunk.length > 0) {\n            chunks.push(chunk);\n        }\n\n        // Calcula o novo início subtraindo a sobreposição (overlap).\n        inicio = fim - overlapCarac;\n        if (inicio < 0) inicio = 0; // Evita índices negativos no início\n    }\n\n    return chunks;\n}\n\n// --- PROCESSAMENTO PRINCIPAL ---\n\n// O nó espera UM item de entrada contendo o texto combinado.\nconst inputItem = $input.first().json['combined_text '];\nconst resultados = [];\nconst URL_ORIGINAL = $('Normalização Planilhas').first().json.url; // Assumindo que a URL original foi mantida\n\n// 1. **MUITO IMPORTANTE:** Ajuste 'combined_text' para o nome exato da chave JSON\n// onde o nó anterior (Merge ou Function) colocou todo o conteúdo raspado.\nconst textoCombinado = $input.first().json['combined_text ']; \n\nif (!textoCombinado || textoCombinado.length === 0) {\n    console.error('Texto combinado não encontrado ou está vazio.');\n    // Retorna o item original para que o erro possa ser tratado no fluxo.\n    return inputItem; \n}\n\n// 2. Cria chunks inteligentes\n// Requisito: ~800-1000 tokens. Usaremos 3500 caracteres (aprox. 4:1) com 300 de overlap.\nconst chunks = criarChunksInteligentes(textoCombinado, 3500, 300); \n\n// 3. Adiciona cada chunk à lista final (preparando para o nó OpenAI Embedding)\nchunks.forEach((chunk, index) => {\n    // ...\n    // Cria o novo item para o n8n\n    resultados.push({\n        json: {\n            source_url: URL_ORIGINAL,\n            content: chunk,\n            chunk_index: index,\n            total_chunks: chunks.length,\n            // AQUI está a correção da linha 71 (ou próxima)\n            // instructions: inputItem.json?.instructions || 'INSTRUÇÃO_NAO_DISPONIVEL' \n        },\n        // ...\n    });\n});\n\nreturn resultados;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        48
+      ],
+      "id": "fb8c80ce-2e91-4fdc-a32c-e8ef03bb8896",
+      "name": "Chuncks"
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source_url",
+                "value": "={{ $json.source_url }}"
+              },
+              {
+                "name": "=chunk_index ",
+                "value": "={{ $json.chunk_index }}"
+              },
+              {
+                "name": "total_chunks",
+                "value": "={{ $json.total_chunks }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        3024,
+        272
+      ],
+      "id": "9d143909-3432-478c-9d59-4b6f83ad9945",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "content": "## Intelligent Chunking\n\nRealiza o Splite Text e cria chunks de 800 a 1000 tokens com overlap de 200\n",
+        "height": 304,
+        "width": 256,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2304,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "46827933-6742-4348-a6f2-61d683eaab08",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "## SUPABASE - VECTOR STORE\n\nInsere dentro do banco de dados vetorial as informações extraidas do site principal e seus 10 primeiros links internos\n",
+        "height": 816,
+        "width": 384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2880,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "583cef78-2c87-4f23-8769-300f1045ef33",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "## Atualiza Status \n\n\nPonto de parada e atulização das informações iniciais para   \nextração dos conteudos das paginas ",
+        "height": 448,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3408,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "7dc2d506-6b12-42ba-b96d-69faab816322",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        272
+      ],
+      "id": "8a5e2562-2d28-46d2-bb27-86fd7d24d63f",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "separator": "\\n",
+        "chunkOverlap": 200
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        416
+      ],
+      "id": "0d44993e-ef0c-427c-9fc7-d4b94ae1b43f",
+      "name": "Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A",
+          "mode": "list",
+          "cachedResultName": "Tegra - WebScrapping Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Start Information",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ $('Chuncks').item.json.source_url }}",
+            "status": "Complete",
+            "last_updated": "={{ $now.format(\"yyyy-MM-dd 'as' HH:MM\" ) }}",
+            "error_notes": "none"
+          },
+          "matchingColumns": [
+            "url"
+          ],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "instructions",
+              "displayName": "instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_notes",
+              "displayName": "error_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3472,
+        48
+      ],
+      "id": "d42f2b46-6102-4303-81af-4046db3c0cf8",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uvC2UtLPfx0t9afo",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -432,
+        576
+      ],
+      "id": "c13ec02d-350b-40b1-b3aa-d0c733f5dbfc",
+      "name": "API CloudScraping",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c42b6892-f851-4c7e-8fb1-4c12435659f4",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "pendente",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1232,
+        64
+      ],
+      "id": "2ad7f104-0403-4765-9737-166173114f67",
+      "name": "Verificador de Status"
+    },
+    {
+      "parameters": {
+        "content": "## API CloudScraper (Decrepit)\n\nEm caso de Falha utiliza o CloudScraper\n\nhttps://github.com/jordanpotti/CloudScraper",
+        "height": 368,
+        "width": 432,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1696,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "7cf0bbd7-910b-4a95-a02a-56f50512ccd6",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "content": "# EXTRACT ",
+        "height": 1072,
+        "width": 2048,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -576,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "a0a90a22-1cbf-46e8-afa2-8af6b64ab4c3",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "content": "# TRANSFORME ",
+        "height": 880,
+        "width": 1056,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1584,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "068f6519-a19f-4dfa-ab7c-122cfbb6233b",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "# LOAD",
+        "height": 1056,
+        "width": 1040,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2720,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "745d5ed9-d241-4311-9753-56dc11e54c07",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "# Semantic search consulting",
+        "height": 656,
+        "width": 1920,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -528,
+        1104
+      ],
+      "typeVersion": 1,
+      "id": "47c6fdf2-21c7-4f7a-92cc-8251ade2a152",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A",
+          "mode": "list",
+          "cachedResultName": "Tegra - WebScrapping Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Start Information",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RCFTjYYm0kz04pXwQmf01pjWsg9Amw235UQFiLkhN2A/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1584,
+        64
+      ],
+      "id": "852214ce-7b80-4e30-a3f6-f85f078b6d58",
+      "name": "Get row(s) in sheet",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uvC2UtLPfx0t9afo",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "=Você é um Agente de Busca e Extração de Dados especializado em conteúdo web. Sua tarefa é responder à pergunta do usuário apenas com base no contexto de texto fornecido abaixo. Não invente informações. Se a informação não estiver presente no contexto, você deve indicar que ela não foi encontrada. Seu objetivo é extrair e estruturar as informações solicitadas.\n\n\nInstruções de Extração (do Google Sheets): {{ $json.instructions }} \nContexto Recuperado do Supabase: {{ $json.chunk_text }}\nPergunta do Usuário: {{ $json.query }} "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        320,
+        1408
+      ],
+      "id": "bd5c51fa-7aa3-426b-8aec-66d046a8cec7",
+      "name": "RAG AGENT"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Você é um Extrator de Metadados especializado. Sua única tarefa é analisar a pergunta do usuário e identificar parâmetros específicos para filtragem de busca. Você DEVE retornar sua resposta como um objeto JSON estrito com a chave source_url."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        1408
+      ],
+      "id": "3cd570e5-6d26-48ac-847d-e4974fd99158",
+      "name": "METADATA AGENTE"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Puppeteer - Main Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Puppeteer - Links Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python (Beta)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Upload to DataBase",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to DataBase": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Filtro de links - 10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalização Planilhas": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de links - 10": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puppeteer - Main Content": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "API CloudScraping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Chuncks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RAG AGENT",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "METADATA AGENTE",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "RAG AGENT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "RAG AGENT",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "METADATA AGENTE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puppeteer - Links Content": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "API CloudScraping1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API CloudScraping1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuncks": {
+      "main": [
+        [
+          {
+            "node": "Upload to DataBase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Upload to DataBase",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API CloudScraping": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Beta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificador de Status": {
+      "main": [
+        [
+          {
+            "node": "Normalização Planilhas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Verificador de Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "METADATA AGENTE": {
+      "main": [
+        [
+          {
+            "node": "RAG AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "f59fb0b1-492b-43e9-a6f8-2cd646a54292",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b3581f09eed7f2ce10061d1a87188fbb7f2d13a10ca9fd13a1c133932900cbd3"
+  },
+  "id": "9Ky0d1hl0VMXDI62",
+  "tags": []
+}
