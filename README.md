@@ -1,4 +1,4 @@
-# 🤖 Tegra Challenger: Web scraping workflow with n8n 🤖
+# Tegra Challenger: Web scraping workflow with n8n 
 
 ## Desafio do Projeto
 
